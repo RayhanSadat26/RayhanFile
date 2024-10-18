@@ -1,126 +1,77 @@
 #include <stdio.h>
 #include <string.h>
-char infix[20],postfix[20],stack[20],a;
-char temp;
-int length,postfixindex=0,pos;
-int top=-1;
-void infixtopostfix();
-void push(char a);
-char pop();
-int priority(char a);
-int priority(char a)
-{
-    int p;
-    switch(a)
-    {
-        case '^':
-        {
-            p=3;
-            break;
-        }
-        case '*':
-        case'/':
-        {
-            p=2;
-            break;
-        }
-        case '+':
-        case '-':
-        {
-            p=1;
-            break;
-        }
-        case '(':
-        {
-            p=0;
-            break;
-        }
-    }
-    return (p);
-}
-void push(char a)
-{
-    if (top==20)
-    {
-        printf("Stack is full");
-    }
-    else
-    {
-        top=top+1;
-        stack[top]=a;
-    }
-}
-char pop()
-{
-    char b;
-    if (top==-1)
-    {
-        printf("Underflow");
-    }
-    else
-    {
-        return stack[top];
-        top=top-1;
-    }
-}
-void infixtopostfix()
-{
-    int index1=0;
-    length=strlen(infix);
-    push('#');
-    while(index1<length)
-    {
-        a=infix[index1];
-        switch(a)
-        {
-            case '(':
-            {
-                push(a);
-            }
-            case '+':
-            case '-':
-            case '*':
-            case '/':
-            case '^':
-            {
-                while (priority(stack[pos])>=priority(a))
-                {
-                    temp=pop();
-                    postfix[pos++]=a;
+#include <ctype.h>
 
-                }
-                push(a);
-                break;
-            }
-            case ')':
-            {
-                temp=pop();
-                while (temp!='(')
-                {
-                    postfix[pos]=temp;
-                    pos++;
-                    temp=pop();
-                }
-                break;
-            }
-            default:
-            {
-                postfix[pos++]=a;
-            }
-            index1++;
-        }
-        while (top>0)
+char infix[100], stack[100];
+int top = -1;
+
+void push(char a) 
+{
+    if (top == 99) 
+    {
+        printf("Overflow\n");
+    } else 
+    {
+        top++;
+        stack[top] = a;
+    }
+}
+
+char pop() 
+{
+    if (top == -1) 
+    {
+        printf("Underflow\n");
+        return '\0';
+    }
+    return stack[top--]; 
+}
+
+int priority(char b) {
+    if (b == '(') return 0;
+    if (b == '*' || b == '/') return 2;
+    if (b == '^') return 3;
+    if (b == '+' || b == '-') return 1;
+    return -1; 
+}
+
+int main() {
+    int i;
+    printf("Enter your expression: ");
+    scanf("%s", infix);
+    
+    int length = strlen(infix);
+        infix[length] = ')'; 
+        infix[length + 1] = '\0'; 
+    push('('); 
+    length = strlen(infix); 
+
+    for (i = 0; i < length; i++) 
+    {
+        if (infix[i] == '(') 
         {
-            temp=pop();
-            postfix[pos++]=temp;
+            push(infix[i]);
+        } 
+        else if (isalnum(infix[i])) 
+        {
+            printf("%c", infix[i]); // Print operands directly
+        } 
+        else if (infix[i] == '^' || infix[i] == '-' || infix[i] == '+' || infix[i] == '*' || infix[i] == '/') 
+        {
+            while (priority(stack[top]) >= priority(infix[i]))
+            {
+                printf("%c", pop()); 
+            }
+            push(infix[i]); 
+        } 
+        else if (infix[i] == ')') 
+        {
+            while (stack[top] != '(') 
+            {
+                printf("%c", pop()); 
+            }
+            pop(); 
         }
     }
-
-}
-void main()
-{
-    printf("Enter you infix");
-    scanf("%s",&infix);
-    infixtopostfix();
-    printf("Postfix is %s",postfix);
+    return 0;
 }
