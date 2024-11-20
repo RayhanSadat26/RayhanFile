@@ -1,0 +1,100 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *next;
+};
+
+struct node *front = NULL;
+struct node *rear = NULL;
+int rearcount = -1;
+int frontcount = -1;
+
+struct node* createnode(int value) {
+    struct node* newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = value;
+    newnode->next = NULL;
+    return newnode;
+}
+
+void printqueue() {
+    if (front == NULL) {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    struct node* current = front;
+    while (current != NULL) {
+        printf("%d -> ", current->data);
+        current = current->next;
+    }
+    printf("END OF Queue\n");
+}
+
+void enqueue(int val) {
+    if (rearcount == 4) {
+        printf("Queue is full\n");
+    } else {
+        struct node* newnode = createnode(val);
+
+        if (front == NULL) {
+            front = newnode;
+            rear = newnode;
+            rearcount++;
+            frontcount++;
+        } else {
+            rear->next = newnode;
+            rear = newnode;
+            rearcount++;
+        }
+    }
+}
+
+void dequeue() {
+    if (front == NULL) {
+        printf("Queue is empty, nothing to delete\n");
+    } else {
+        struct node* temp = front;
+        front = front->next;
+        free(temp);
+        frontcount--;
+
+        if (front == NULL) {
+            rear = NULL;
+        }
+    }
+}
+
+void main()
+{
+    int n,val;
+    while(1)
+    {
+        printf("Enter 1 to enqueue, 2 to dequeue,3 to display and 4 to exit");
+        scanf("%d",&n);
+        if (n==1)
+        {
+            printf("Enter value");
+            scanf("%d",&val);
+            enqueue(val);
+        }
+        else if (n==2)
+        {
+            dequeue();
+        }
+        else if (n==3)
+        {
+            printqueue();
+        }
+        else if (n==4)
+        {
+            exit(0);
+        }
+        else
+        {
+            printf("Invalid input");
+        }
+    }
+
+}
