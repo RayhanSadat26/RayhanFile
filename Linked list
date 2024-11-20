@@ -1,0 +1,120 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node 
+{
+    int data;
+    struct node *next;
+};
+struct node* head=NULL;
+struct node* ptr=NULL;
+struct node* createnode(int value)
+{
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=value;
+    newnode->next=NULL;
+}
+void createll(int n)
+{
+    if (n==0)
+    {
+        printf("Empty list");
+        exit(0);
+    }
+    int val;
+    for (int i=0;i<n;i++)
+    {
+        printf("Enter value to enter in new node");
+        scanf("%d",&val);
+        struct node* newnode=createnode(val);
+        if (head==NULL)
+        {
+            head=newnode;
+        }
+        else
+        {
+            ptr->next=newnode;
+        }
+        ptr=newnode;
+    }
+}
+void printll()
+{
+    ptr=head;
+    while(ptr->next!=NULL)
+    {
+        printf("%d->",ptr->data);
+        ptr=ptr->next;
+    }
+    printf("%d\nEND OF LINKED LIST\n",ptr->data);
+}
+void insert_at_beg(int value)
+{
+    struct node* newnode = createnode(value);
+    struct node* insertptr;
+    insertptr=head;
+    head=newnode;
+    head->next=insertptr;
+}
+void insert_at_end(int value)
+{
+    struct node* newnode = createnode(value);
+    ptr->next=newnode;
+    ptr=newnode;
+}
+void delete_at_beg()
+{
+    if (head==NULL)
+    {
+        printf("List is empty nothing to delete");
+        exit(0);
+    }
+    struct node* deleteptr;
+    deleteptr=head;
+    head=head->next;
+    printf("Element deleted is %d\n",deleteptr->data);
+    free(deleteptr);
+}
+void delete_at_end()
+{
+    if (head==NULL)
+    {
+        printf("List is empty nothing to delete");
+        exit(0);
+    }
+    struct node* deleteptr;
+    struct node* preptr;
+    preptr=head;
+    while (preptr->next!=NULL)
+    {
+        deleteptr=preptr;
+        preptr=preptr->next;
+    }
+    deleteptr->next=NULL;
+    ptr=deleteptr;
+    printf("Element deleted is %d\n",preptr->data);
+    free(preptr);
+}
+void deletell()
+{
+    struct node* preptr;
+    preptr=head;
+    while (preptr->next!=NULL)
+    {
+       delete_at_beg();
+    }
+    
+}
+void main()
+{
+    createll(5);
+    insert_at_beg(0);
+    insert_at_end(60);
+    printll();
+    delete_at_beg();
+    delete_at_end();
+    printll();
+    deletell();
+    printll();
+    
+}
+
