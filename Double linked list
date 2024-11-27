@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int data;
+    struct node* next;
+    struct node* prev;
+};
+struct node* head=NULL;
+struct node* nextnode=NULL;
+struct node* createnode(int val)
+{
+    struct node* newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=val;
+    newnode->prev=NULL;
+    newnode->next=NULL;
+}
+void createdll(int n)
+{
+    int val,i;
+    for (i=0;i<n;i++)
+    {
+        printf("Enter value");
+        scanf("%d",&val);
+        struct node* newnode=createnode(val);
+        if (head==NULL)
+        {
+            head=newnode;
+            nextnode=newnode;
+        }
+        else
+        {
+            nextnode->next=newnode;
+            newnode->prev=nextnode;
+            nextnode=newnode;
+        }
+    }
+}
+void printdllforward()
+{
+    nextnode=head;
+    if (head==NULL)
+    {
+        printf("list empty\n");
+    }
+    while(nextnode->next!=NULL)
+    {
+        printf("%d ->",nextnode->data);
+        nextnode=nextnode->next;
+    }
+    printf("%d\n",nextnode->data);
+}
+void printdllbackward()
+{
+    if (head==NULL)
+    {
+        printf("List empty\n");
+    }
+    head=nextnode;
+    while (head->prev!=NULL)
+    {
+        printf("%d <-",head->data);
+        head=head->prev;
+    }
+    printf("%d\n",head->data);
+    
+    
+}
+void insert_at_beg(int val)
+{
+    struct node* newnode=createnode(val);
+    head->prev=newnode;
+    newnode->next=head;
+    head=newnode;
+}
+void insert_at_end(int val)
+{
+    struct node* newnode=createnode(val);
+    nextnode->next=newnode;
+    newnode->prev=nextnode;
+    nextnode=newnode;
+    
+}
+void delete_at_beg()
+{
+    struct node* ptr;
+    ptr=head;
+    head=head->next;
+    head->prev=NULL;
+    free(ptr);
+}
+void delete_at_end()
+{
+    struct node* ptr;
+    ptr=nextnode;
+    nextnode=nextnode->prev;
+    nextnode->next=NULL;
+    free(ptr);
+}
+void main()
+{
+    createdll(3);
+    printdllforward();
+    printdllbackward();
+    insert_at_beg(5);
+    insert_at_end(10);
+    printdllforward();
+    printdllbackward();
+    delete_at_beg();
+    delete_at_end();
+    printdllforward();
+    printdllbackward();
+    
+    
+    
+}
